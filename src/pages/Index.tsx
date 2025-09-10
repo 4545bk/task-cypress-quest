@@ -1,11 +1,131 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React, { useState, useEffect } from 'react';
+import { Card } from '@/components/ui/card';
+import TaskForm from '@/components/TaskForm';
+import TaskList, { Task } from '@/components/TaskList';
+import TaskFilter, { FilterType } from '@/components/TaskFilter';
+import { CheckSquare, Sparkles } from 'lucide-react';
+
+const STORAGE_KEY = 'task-manager-tasks';
 
 const Index = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentFilter, setCurrentFilter] = useState<FilterType>('all');
+
+  // Load tasks from localStorage on component mount
+  useEffect(() => {
+    const savedTasks = localStorage.getItem(STORAGE_KEY);
+    if (savedTasks) {
+      try {
+        const parsedTasks = JSON.parse(savedTasks);
+        setTasks(parsedTasks);
+      } catch (error) {
+        console.error('Error loading tasks from localStorage:', error);
+      }
+    }
+  }, []);
+
+  // Save tasks to localStorage whenever tasks change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  }, [tasks]);
+
+  const addTask = (title: string) => {
+    const newTask: Task = {
+      id: crypto.randomUUID(),
+      title,
+      completed: false,
+      createdAt: new Date().toISOString(),
+    };
+    setTasks(prev => [newTask, ...prev]);
+  };
+
+  const toggleTask = (id: string) => {
+    setTasks(prev =>
+      prev.map(task =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+
+  const deleteTask = (id: string) => {
+    setTasks(prev => prev.filter(task => task.id !== id));
+  };
+
+  const filteredTasks = tasks.filter(task => {
+    switch (currentFilter) {
+      case 'active':
+        return !task.completed;
+      case 'completed':
+        return task.completed;
+      default:
+        return true;
+    }
+  });
+
+  const taskCounts = {
+    all: tasks.length,
+    active: tasks.filter(task => !task.completed).length,
+    completed: tasks.filter(task => task.completed).length,
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="p-3 bg-gradient-to-br from-primary to-primary/80 rounded-2xl shadow-lg">
+              <CheckSquare className="w-8 h-8 text-primary-foreground" />
+            </div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+              Task Manager
+            </h1>
+            <Sparkles className="w-6 h-6 text-primary" />
+          </div>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Stay organized and productive with our beautiful task management system. 
+            Add, complete, and organize your tasks with ease.
+          </p>
+        </div>
+
+        {/* Main Content */}
+        <Card className="p-8 shadow-lg border-0 bg-card/80 backdrop-blur-sm">
+          <TaskForm onAddTask={addTask} />
+          
+          <TaskFilter
+            currentFilter={currentFilter}
+            onFilterChange={setCurrentFilter}
+            taskCounts={taskCounts}
+          />
+
+          <TaskList
+            tasks={filteredTasks}
+            onToggleTask={toggleTask}
+            onDeleteTask={deleteTask}
+          />
+        </Card>
+
+        {/* Footer Stats */}
+        {tasks.length > 0 && (
+          <div className="mt-8 text-center">
+            <div className="inline-flex items-center gap-6 px-6 py-3 bg-card/60 backdrop-blur-sm rounded-full border">
+              <div className="text-sm">
+                <span className="font-medium text-foreground">{taskCounts.all}</span>
+                <span className="text-muted-foreground ml-1">total</span>
+              </div>
+              <div className="w-px h-4 bg-border"></div>
+              <div className="text-sm">
+                <span className="font-medium text-warning">{taskCounts.active}</span>
+                <span className="text-muted-foreground ml-1">active</span>
+              </div>
+              <div className="w-px h-4 bg-border"></div>
+              <div className="text-sm">
+                <span className="font-medium text-success">{taskCounts.completed}</span>
+                <span className="text-muted-foreground ml-1">done</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
