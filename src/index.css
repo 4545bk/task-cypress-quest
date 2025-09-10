@@ -76,6 +76,18 @@ All colors MUST be HSL.
     --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
+    /* Priority colors */
+    --priority-low: 142 76% 45%;
+    --priority-low-light: 142 76% 95%;
+    --priority-medium: 45 93% 58%;
+    --priority-medium-light: 45 93% 95%;
+    --priority-high: 0 84% 60%;
+    --priority-high-light: 0 84% 95%;
+
+    /* Overdue color */
+    --overdue: 0 84% 70%;
+    --overdue-light: 0 84% 97%;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -147,6 +159,18 @@ All colors MUST be HSL.
     --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -1px hsl(0 0% 0% / 0.3);
     --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -2px hsl(0 0% 0% / 0.3);
     --shadow-primary: 0 4px 12px hsl(217 91% 65% / 0.4);
+
+    /* Dark mode priority colors */
+    --priority-low: 142 76% 50%;
+    --priority-low-light: 142 76% 15%;
+    --priority-medium: 45 93% 63%;
+    --priority-medium-light: 45 93% 15%;
+    --priority-high: 0 84% 65%;
+    --priority-high-light: 0 84% 15%;
+
+    /* Dark mode overdue color */
+    --overdue: 0 84% 75%;
+    --overdue-light: 0 84% 12%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -216,5 +240,64 @@ All colors MUST be HSL.
   .btn-destructive:hover {
     transform: translateY(-1px);
     background: hsl(var(--destructive-hover));
+  }
+
+  /* Task animations */
+  .task-item-enter {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+
+  .task-item-enter-active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: var(--transition-smooth);
+  }
+
+  .task-item-exit {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .task-item-exit-active {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    transition: var(--transition-smooth);
+  }
+
+  /* Priority badge styles */
+  .priority-low {
+    background: hsl(var(--priority-low-light));
+    color: hsl(var(--priority-low));
+    border: 1px solid hsl(var(--priority-low) / 0.3);
+  }
+
+  .priority-medium {
+    background: hsl(var(--priority-medium-light));
+    color: hsl(var(--priority-medium));
+    border: 1px solid hsl(var(--priority-medium) / 0.3);
+  }
+
+  .priority-high {
+    background: hsl(var(--priority-high-light));
+    color: hsl(var(--priority-high));
+    border: 1px solid hsl(var(--priority-high) / 0.3);
+  }
+
+  /* Overdue styling */
+  .task-overdue {
+    border-left: 4px solid hsl(var(--overdue));
+    background: hsl(var(--overdue-light));
+  }
+
+  /* Drag and drop styles */
+  .task-dragging {
+    transform: rotate(5deg);
+    opacity: 0.8;
+  }
+
+  .task-drop-area {
+    border: 2px dashed hsl(var(--primary));
+    background: hsl(var(--primary) / 0.05);
   }
 }
