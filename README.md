@@ -2,7 +2,7 @@
 
 A beautiful, modern task management application built with React, TypeScript, and optimized for end-to-end testing with Cypress. This project demonstrates best practices for building testable web applications with comprehensive E2E test coverage.
 
-![Task Manager](https://lovable.dev/opengraph-image-p98pqg.png)
+
 
 ## 🚀 Features
 
