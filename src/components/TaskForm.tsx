@@ -53,13 +53,13 @@ const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <Select value={priority} onValueChange={(value: 'low' | 'medium' | 'high') => setPriority(value)}>
-          <SelectTrigger data-cy="add-task-priority">
+          <SelectTrigger data-cy="add-task-priority" className="focus:ring-2 focus:ring-primary">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="low">Low Priority</SelectItem>
-            <SelectItem value="medium">Medium Priority</SelectItem>
-            <SelectItem value="high">High Priority</SelectItem>
+          <SelectContent className="z-50">
+            <SelectItem value="low" className="cursor-pointer hover:bg-accent">Low Priority</SelectItem>
+            <SelectItem value="medium" className="cursor-pointer hover:bg-accent">Medium Priority</SelectItem>
+            <SelectItem value="high" className="cursor-pointer hover:bg-accent">High Priority</SelectItem>
           </SelectContent>
         </Select>
 

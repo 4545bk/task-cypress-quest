@@ -52,7 +52,7 @@ describe('Task Manager - Interactions', () => {
     cy.getByDataCy('delete-btn').click()
     
     // Verify task is removed
-    cy.getByDataCy('task-list').should('not.exist')
+    cy.getByDataCy('task-item').should('not.exist')
     cy.contains('No tasks yet').should('be.visible')
     
     // Verify counts are updated

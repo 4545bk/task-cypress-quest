@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { format, isAfter, parseISO } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -107,11 +106,12 @@ const TaskItem: React.FC<TaskItemProps> = ({
             transition={{ duration: 0.2 }}
             className="flex items-start gap-4"
           >
-            <Checkbox
+            <input
+              type="checkbox"
               checked={task.completed}
-              onCheckedChange={() => onToggleTask(task.id)}
+              onChange={() => onToggleTask(task.id)}
               data-cy="complete-checkbox"
-              className="mt-1 w-5 h-5"
+              className="mt-1 w-5 h-5 rounded border-2 border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2"
             />
             
             <div className="flex-1 space-y-2">
@@ -206,8 +206,8 @@ const TaskItem: React.FC<TaskItemProps> = ({
                     
                     <span
                       className={cn(
-                        "flex-1 text-base font-medium cursor-pointer",
-                        task.completed ? "task-completed text-muted-foreground" : "text-foreground"
+                        "flex-1 text-base font-medium cursor-pointer text-foreground",
+                        task.completed ? "task-completed line-through opacity-60" : ""
                       )}
                       onDoubleClick={() => setIsEditing(true)}
                     >
@@ -219,31 +219,32 @@ const TaskItem: React.FC<TaskItemProps> = ({
                     </Badge>
                   </div>
 
-                  {(task.dueDate || task.notes) && (
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="details" className="border-0">
-                        <AccordionTrigger className="py-2 text-sm text-muted-foreground hover:no-underline">
-                          View details
-                        </AccordionTrigger>
-                        <AccordionContent className="space-y-2 text-sm">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-muted-foreground">
-                            <div>Created: {format(parseISO(task.createdAt), "MMM d, yyyy")}</div>
-                            {task.dueDate && (
-                              <div className={isOverdue ? "text-destructive font-medium" : ""}>
-                                Due: {format(parseISO(task.dueDate), "MMM d, yyyy")}
-                                {isOverdue && " (Overdue)"}
-                              </div>
-                            )}
-                          </div>
-                          {task.notes && (
-                            <div className="mt-2 p-3 bg-muted rounded-md">
-                              <p className="text-sm">{task.notes}</p>
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="details" className="border-0">
+                      <AccordionTrigger 
+                        className="py-2 text-sm text-muted-foreground hover:no-underline"
+                        data-state="closed"
+                      >
+                        View details
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-2 text-sm">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-muted-foreground">
+                          <div>Created: {format(parseISO(task.createdAt), "MMM d, yyyy")}</div>
+                          {task.dueDate && (
+                            <div className={isOverdue ? "text-destructive font-medium" : ""}>
+                              Due: {format(parseISO(task.dueDate), "MMM d, yyyy")}
+                              {isOverdue && " (Overdue)"}
                             </div>
                           )}
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  )}
+                        </div>
+                        {task.notes && (
+                          <div className="mt-2 p-3 bg-muted rounded-md">
+                            <p className="text-sm">{task.notes}</p>
+                          </div>
+                        )}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </>
               )}
             </div>

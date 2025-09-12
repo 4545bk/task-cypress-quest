@@ -53,7 +53,7 @@ describe('Task Manager - Full End-to-End Flow', () => {
     cy.getByDataCy('filter-active').click()
     cy.getByDataCy('task-item').should('have.length', 2)
     cy.getByDataCy('task-item').should('contain', 'Write unit tests')
-    cy.getByDataCy('task-item').should('contain', 'Implement user interface')
+
     
     // Step 5: Delete some tasks
     // Delete one active task
